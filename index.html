@@ -10,7 +10,6 @@
  #controls{display:flex;justify-content:center;gap:10px;margin-bottom:8px}
  button{padding:8px 16px;font-size:15px;border:none;border-radius:6px;color:#fff;background:#2196f3;min-width:105px}
  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:96vw;max-width:360px;margin:0 auto}
- /* セット完了後: グリッド全体を青太枠 */
  .grid.locked{border:4px solid #2196f3;padding:4px;border-radius:8px}
  .cell{position:relative;border:2px solid #555;width:100%;aspect-ratio:1/1;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
  .cell span.num{position:absolute;left:4px;top:2px;font-size:14px;font-weight:700;color:#000;border:1px solid #000;padding:0 4px;border-radius:3px;background:#fff;pointer-events:none}
@@ -20,7 +19,6 @@
  #popup{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(0,0,0,.8);transition:opacity .4s;z-index:1000}
  #popup img{width:90vw;max-height:90vh;object-fit:contain}
  #setNotice{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);display:none;z-index:1100;font-size:20px;font-weight:700;color:#fff;background:#000;padding:6px 16px;border-radius:6px}
- /* 薄めレッドの pulse */
  @keyframes pulse{0%{background:#ffe5e5}50%{background:#ff8a8a}100%{background:#ffe5e5}}
  .pulse-bg{animation:pulse 1.2s ease-in-out infinite}
 </style>
@@ -43,22 +41,37 @@ const shuffleBtn=document.getElementById('shuffleBtn');
 const setBtn=document.getElementById('setBtn');
 const setNotice=document.getElementById('setNotice');
 
-// ▼ ここに通常クリック時の画像を追加
+// ▼ 画像10枚を割り当て
 const imgNormal = [
-  './images/click1.jpg',
-  './images/click2.jpg'
-  // './images/click3.jpg',
+  './images/134335_0.jpg',
+  './images/134649_0.jpg',
+  './images/134650_0.jpg',
+  './images/134651_0.jpg',
+  './images/134652_0.jpg',
+  './images/134656_0.jpg',
+  './images/134657_0.jpg',
+  './images/134658_0.jpg',
+  './images/134660_0.jpg',
+  './images/134662_0.jpg',
+  './images/99634.jpg',
+  './images/99638.jpg',
+  './images/99641.jpg',
+  './images/99643.jpg',
+  './images/LINE_ALBUM_20250502_250502_3.jpg',
+  './images/LINE_ALBUM_20250502_250502_5.jpg',
+  './images/LINE_ALBUM_20250502_250502_6.jpg',
+  './images/LINE_ALBUM_20250502_250502_7.jpg',
+  './images/LINE_ALBUM_20250502_250502_8.jpg',
+  './images/134653_0.jpg',
+  './images/99640.jpg',
+  './images/LINE_ALBUM_20250502_250502_2.jpg',
+  './images/LINE_ALBUM_20250502_250502_4.jpg'
 ];
-// ▼ リーチ演出用
-const imgReach = [
-  './images/reach1.jpg',
-  './images/reach2.jpg'
-  // './images/reach3.jpg',
-];
-// ▼ ビンゴ確定用
+const imgReach = [...imgNormal];
 const imgBingo = [
-  './images/bingo1.jpg'
-  // './images/bingo2.jpg',
+  './images/134333.jpg',
+  './images/LINE_ALBUM_20250502_250502_1.jpg',
+  './images/S__358383624.jpg'
 ];
 
 let cells=[];let gameLocked=true;
@@ -96,8 +109,10 @@ function isReach(){
  const l=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
  return l.some(line=>line.filter(i=>m[i]).length===2&&line.filter(i=>!m[i]).length===1);
 }
-function isBingo(){const m=cells.map(c=>c.classList.contains('marked'));
- const l=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];return l.some(line=>line.every(i=>m[i]));}
+function isBingo(){
+ const m=cells.map(c=>c.classList.contains('marked'));
+ const l=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];return l.some(line=>line.every(i=>m[i]));
+}
 
 shuffleBtn.onclick=()=>buildBoard();
 setBtn.onclick=()=>{
