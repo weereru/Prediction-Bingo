@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お題ビンゴ</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #fefefe;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 10px;
+      width: 300px;
+      margin: 40px auto;
+    }
+    .cell {
+      border: 2px solid #aaa;
+      padding: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      background-color: #fff;
+      user-select: none;
+    }
+    .marked {
+      background-color: #8bc34a;
+      color: #fff;
+    }
+    #popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: white;
+      border: 2px solid #333;
+      box-shadow: 0px 0px 20px rgba(0,0,0,0.2);
+    }
+    #popup img {
+      max-width: 200px;
+    }
+    #clearMsg {
+      display: none;
+      font-size: 24px;
+      color: #e91e63;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>お題ビンゴ</h1>
+  <div class="grid" id="grid"></div>
+  <div id="popup"><img id="popupImage" src="" alt="popup"></div>
+  <div id="clearMsg">BINGO!!</div>
+
+  <script>
+    const grid = document.getElementById("grid");
+    const popup = document.getElementById("popup");
+    const popupImage = document.getElementById("popupImage");
+    const clearMsg = document.getElementById("clearMsg");
+
+    const images = [
+      "https://i.imgur.com/1.jpg",
+      "https://i.imgur.com/2.jpg",
+      "https://i.imgur.com/3.jpg"
+      // ここに追加で画像URLを入れる
+    ];
+
+    const cells = [];
+
+    function checkBingo() {
+      const marked = cells.map(cell => cell.classList.contains("marked"));
+      const lines = [
+        [0,1,2],[3,4,5],[6,7,8], // 横
+        [0,3,6],[1,4,7],[2,5,8], // 縦
+        [0,4,8],[2,4,6]          // ななめ
+      ];
+      return lines.some(line => line.every(i => marked[i]));
+    }
+
+    // 1〜9のランダムな数字を生成
+    const numbers = [...Array(9).keys()].map(n => n + 1).sort(() => Math.random() - 0.5);
+
+    for (let i = 0; i < 9; i++) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      cell.textContent = numbers[i];
+      cell.addEventListener("click", () => {
+        if (!cell.classList.contains("marked")) {
+          cell.classList.add("marked");
+
+          const img = images[Math.floor(Math.random() * images.length)];
+          popupImage.src = img;
+          popup.style.display = "block";
+          setTimeout(() => { popup.style.display = "none" }, 2000);
+
+          if (checkBingo()) {
+            clearMsg.style.display = "block";
+          }
+        }
+      });
+      grid.appendChild(cell);
+      cells.push(cell);
+    }
+  </script>
+</body>
+</html>
